@@ -3,7 +3,21 @@ import { getSpeciesService } from "@/lib/services/species.service";
 import { notFound } from "next/navigation";
 import { DnaOffIcon } from "lucide-react";
 
-// Displays species as a list of badge components.
+/**
+ * Displays a list of species as badge components.
+ *
+ * @remarks
+ * This is a **server component** that fetches species data for the given IDs
+ * and renders them as badge UI elements.
+ *
+ * @param props - Component props.
+ * @param props.ids - An array of SWAPI species IDs to fetch and display.
+ *
+ * @example
+ * ```tsx
+ * <SpeciesBadges ids={["1", "2", "3"]} />
+ * ```
+ */
 export default async function SpeciesBadges({ ids }: { ids: string[] }) {
   const speciesService = getSpeciesService();
 

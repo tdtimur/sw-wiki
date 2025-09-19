@@ -15,6 +15,23 @@ import Link from "next/link";
 import { capitalizeWords, cn, parseSwapiPath } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
+/**
+ * A card component that displays basic information about a Star Wars character.
+ *
+ * @remarks
+ * Shows the character's name, gender, and birth year.
+ * Includes a link to the character detail page if an ID can be parsed
+ * from the SWAPI resource URL.
+ *
+ * @param props - Component props.
+ * @param props.character - A `People` object containing the character's data.
+ * @param props.className - Optional additional Tailwind CSS classes for styling.
+ *
+ * @example
+ * ```tsx
+ * <CharacterCard character={character} className="w-full" />
+ * ```
+ */
 export default function CharacterCard({
   character,
   className = "",

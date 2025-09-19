@@ -1,3 +1,6 @@
+/**
+ * Represents Star Wars character.
+ */
 export type People = {
   name: string;
   birth_year: string;
@@ -17,6 +20,9 @@ export type People = {
   edited: string;
 };
 
+/**
+ * Arrays of fake data of type `People`.
+ */
 export const fakePeople: People[] = [
   {
     name: "Luke Skywalker",

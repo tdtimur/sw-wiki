@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Star Wars Wiki
+
+A simple **Star Wars Wiki** built with [Next.js](https://nextjs.org/).  
+Search for characters from the Star Wars universe and view detailed information on each character.
+
+## Features
+
+- 🔍 Search Star Wars characters
+- 👤 Per-character detail pages (server-rendered)
+- 🎨 Styled with Tailwind CSS
+- 🛠 Mock services for development (SWAPI-like data)
+- ✅ Linting and build setup included
+
+## Environment Variables
+
+The project uses `NEXT_PUBLIC_SWAPI_HOST` to determine whether to fetch data from the real [SWAPI](https://swapi.dev) or use mock services.
+
+- If `NEXT_PUBLIC_SWAPI_HOST` **starts with `http`**, the app will use the real SWAPI service.
+- Otherwise, the app will fall back to the built-in **mock services**.
+
+### Example
+
+```bash
+# Use real SWAPI
+NEXT_PUBLIC_SWAPI_HOST=https://swapi.dev/api
+
+# Use mock services (default)
+NEXT_PUBLIC_SWAPI_HOST=mock
+```
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app will be available at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Lint the code
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+```
 
-## Learn More
+### 4. Build for production
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 5. Start the production build
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm start
+```
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+ ├─ app/                # Next.js app routes
+ ├─ components/         # Reusable UI components
+ ├─ lib/                # Services, interfaces, and mock data
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Tech Stack
+
+- [Next.js 13+ App Router](https://nextjs.org/docs/app)
+- [React](https://react.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [shadcn/ui](https://ui.shadcn.com/)
+- TypeScript
+
+## Notes
+
+- Character details are fetched server-side on `/characters/[id]`.
+- Mock services simulate SWAPI responses for local development.

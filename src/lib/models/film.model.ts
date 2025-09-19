@@ -1,3 +1,6 @@
+/**
+ * Represents a Star Wars film.
+ */
 export type Film = {
   title: string;
   episode_id: number;
@@ -15,6 +18,9 @@ export type Film = {
   edited: string;
 };
 
+/**
+ * Arrays of fake data of type `Film`.
+ */
 export const fakeFilms: Film[] = [
   {
     title: "Shadows of the Old Republic",

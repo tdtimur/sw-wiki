@@ -1,3 +1,6 @@
+/**
+ * Represents Star Wars species.
+ */
 export type Species = {
   name: string;
   classification: string;
@@ -16,6 +19,9 @@ export type Species = {
   edited: string;
 };
 
+/**
+ * Arrays of fake data of type `Species`.
+ */
 export const fakeSpecies: Species[] = [
   {
     name: "Zyphorian",

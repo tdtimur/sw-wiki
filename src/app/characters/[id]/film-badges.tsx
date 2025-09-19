@@ -1,7 +1,21 @@
 import { getFilmService } from "@/lib/services/film.service";
 import { notFound } from "next/navigation";
 
-// Displays films as a list of badge components.
+/**
+ * Displays a list of films as badges.
+ *
+ * @remarks
+ * This is a **server component** that fetches film data for the given IDs
+ * and renders them as a list of badge components.
+ *
+ * @param props - Component props.
+ * @param props.ids - An array of SWAPI film IDs to fetch and display.
+ *
+ * @example
+ * ```tsx
+ * <FilmBadges ids={["1", "2", "3"]} />
+ * ```
+ */
 export default async function FilmBadges({ ids }: { ids: string[] }) {
   const filmService = getFilmService();
 
