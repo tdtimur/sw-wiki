@@ -1,4 +1,4 @@
-import { PeopleServicer } from "../interfaces/people.interface";
+import type { PeopleServicer } from "../interfaces/people.interface";
 import mockPeopleService from "./people-mock.service";
 
 export function getPeopleService(): PeopleServicer {

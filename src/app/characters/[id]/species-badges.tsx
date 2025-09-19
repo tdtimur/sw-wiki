@@ -1,0 +1,48 @@
+import { Badge } from "@/components/ui/badge";
+import { getSpeciesService } from "@/lib/services/species.service";
+import { notFound } from "next/navigation";
+import { DnaOffIcon } from "lucide-react";
+
+// Displays species as a list of badge components.
+export default async function SpeciesBadges({ ids }: { ids: string[] }) {
+  const speciesService = getSpeciesService();
+
+  try {
+    const speciesPromises = ids.map((id) => speciesService.get(id));
+    const speciesResponses = await Promise.all(speciesPromises);
+    const allOk = speciesResponses.every((response) => response.ok);
+    if (!allOk) {
+      throw new Error("One or more species requests failed");
+    }
+    const specieses = await Promise.all(
+      speciesResponses.map((response) => response.json()),
+    );
+
+    if (specieses.length === 0) {
+      return (
+        <Badge variant={"outline"} className="my-2">
+          <DnaOffIcon />
+          Unknown
+        </Badge>
+      );
+    }
+
+    return (
+      <div className="flex flex-wrap gap-2 my-2">
+        {specieses.map((species) => (
+          <Badge
+            key={species.name}
+            className="bg-emerald-200 text-black text-md"
+          >
+            {species.name}
+          </Badge>
+        ))}
+      </div>
+    );
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error("Error when fetching a species:", err);
+    }
+    notFound();
+  }
+}

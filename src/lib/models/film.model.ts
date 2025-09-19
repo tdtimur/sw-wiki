@@ -1,6 +1,6 @@
 export type Film = {
   title: string;
-  episode_id: string;
+  episode_id: number;
   opening_crawl: string;
   director: string;
   producer: string;
@@ -18,7 +18,7 @@ export type Film = {
 export const fakeFilms: Film[] = [
   {
     title: "Shadows of the Old Republic",
-    episode_id: "X",
+    episode_id: 10,
     opening_crawl:
       "Turmoil spreads across the Outer Rim. As smugglers and bounty hunters profit from chaos, a small band of Jedi Knights attempt to restore balance. But whispers of a new Sith Lord echo through the galaxy...",
     director: "Ava Renlor",
@@ -35,7 +35,7 @@ export const fakeFilms: Film[] = [
   },
   {
     title: "Rise of the Mandalore",
-    episode_id: "XI",
+    episode_id: 11,
     opening_crawl:
       "The Mandalorian clans, long divided, unite under a mysterious leader. As the Republic struggles to respond, rumors spread that the Dark Saber has returned, igniting conflict across the stars.",
     director: "Kael Thorne",
@@ -52,7 +52,7 @@ export const fakeFilms: Film[] = [
   },
   {
     title: "The Lost Holocron",
-    episode_id: "XII",
+    episode_id: 12,
     opening_crawl:
       "A lost Jedi Holocron surfaces in the Unknown Regions. Whoever controls its secrets may alter the fate of the galaxy. Both the Sith and the Jedi race to claim it first.",
     director: "Sera Korrin",

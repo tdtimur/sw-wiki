@@ -1,6 +1,9 @@
 import type { FilmGetter } from "../interfaces/film.interface";
-import { JsonResponse, mockResponse } from "../interfaces/response.interface";
-import { fakeFilms, Film } from "../models/film.model";
+import {
+  type JsonResponse,
+  mockResponse,
+} from "../interfaces/response.interface";
+import { fakeFilms, type Film } from "../models/film.model";
 
 export class MockFilmService implements FilmGetter {
   private data: Film[];

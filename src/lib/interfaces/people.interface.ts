@@ -1,5 +1,5 @@
-import { People } from "../models/people.model";
-import { JsonResponse } from "./response.interface";
+import type { People } from "../models/people.model";
+import type { JsonResponse } from "./response.interface";
 
 export interface PeopleLister {
   list(): Promise<JsonResponse<People[]>>;

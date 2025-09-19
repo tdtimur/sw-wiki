@@ -31,7 +31,9 @@ export default function RootLayout({
       >
         <SiteHeader />
         <Toaster />
-        {children}
+        <main className="min-h-screen w-full px-[5vw] md:px-[10vw] lg:px-[15vw]">
+          {children}
+        </main>
       </body>
     </html>
   );

@@ -13,6 +13,7 @@ import { UserIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { capitalizeWords, cn, parseSwapiPath } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CharacterCard({
   character,
@@ -50,6 +51,28 @@ export default function CharacterCard({
       </CardHeader>
       <CardContent>
         <p>Birth year: {birth_year}</p>
+      </CardContent>
+    </Card>
+  );
+}
+
+export function CharacterCardSkeleton({
+  className = "",
+}: {
+  className?: string;
+}) {
+  return (
+    <Card className={className}>
+      <CardHeader>
+        <CardTitle>
+          <Skeleton className="h-6 w-32" />
+        </CardTitle>
+        <CardDescription>
+          <Skeleton className="h-5 w-20 rounded-full" />
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Skeleton className="h-4 w-40" />
       </CardContent>
     </Card>
   );

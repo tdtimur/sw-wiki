@@ -62,13 +62,11 @@ export function parseSwapiPath(path: string): ParsedSwapi | null {
     .replace("https://swapi.dev", "")
     .split("/")
     .filter((part) => part !== "");
-  console.debug("parts:", parts);
 
   // Expecting format: ["api", "<resource>", "<id>"]
   if (parts.length >= 3 && parts[0] === "api") {
     const resource = parts[1];
     const id = parts[2];
-    console.debug("res:", { resource, id });
     return { resource, id };
   }
 

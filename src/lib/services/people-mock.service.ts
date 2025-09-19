@@ -1,6 +1,9 @@
 import type { PeopleServicer } from "../interfaces/people.interface";
-import { JsonResponse, mockResponse } from "../interfaces/response.interface";
-import { fakePeople, People } from "../models/people.model";
+import {
+  type JsonResponse,
+  mockResponse,
+} from "../interfaces/response.interface";
+import { fakePeople, type People } from "../models/people.model";
 
 export class MockPeopleService implements PeopleServicer {
   private data: People[];
@@ -13,6 +16,9 @@ export class MockPeopleService implements PeopleServicer {
     // Simulate a 1.5-second delay
     console.debug("Get people is called with params: ", id);
     await new Promise((resolve) => setTimeout(resolve, 1500));
+    if (id === "none") {
+      throw new Error("Not found");
+    }
     return mockResponse(this.data[0]);
   }
 
