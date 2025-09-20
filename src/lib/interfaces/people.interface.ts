@@ -1,5 +1,5 @@
 import type { People } from "../models/people.model";
-import type { JsonResponse } from "./response.interface";
+import type { JsonResponse, SwapiListResponse } from "./response.interface";
 
 /**
  * Defines a service that can fetch a full list of `People`.
@@ -10,7 +10,7 @@ export interface PeopleLister {
    *
    * @returns A promise that resolves to a typed JSON response containing an array of people.
    */
-  list(): Promise<JsonResponse<People[]>>;
+  list(page: number): Promise<JsonResponse<SwapiListResponse<People>>>;
 }
 
 /**
@@ -23,7 +23,10 @@ export interface PeopleSearcher {
    * @param keyword - A search string (e.g. part of a name).
    * @returns A promise that resolves to a typed JSON response containing an array of matching people.
    */
-  search(keyword: string): Promise<JsonResponse<People[]>>;
+  search(
+    page: number,
+    keyword: string
+  ): Promise<JsonResponse<SwapiListResponse<People>>>;
 }
 
 /**

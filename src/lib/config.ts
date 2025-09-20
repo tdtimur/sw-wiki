@@ -1,9 +1,10 @@
 type Config = {
   version: string;
   swapiHost: string;
+  isMock(): boolean;
 };
 
-const version = "v0.1.3";
+const version = "v0.1.4";
 
 let config: Config | undefined = undefined;
 
@@ -13,6 +14,9 @@ export default function getConfig(): Config {
   config = {
     version,
     swapiHost,
+    isMock() {
+      return !this.swapiHost.startsWith("http");
+    },
   };
   return config;
 }

@@ -93,7 +93,7 @@ export default function SpeciesPage({ params }: SpeciesPageProps) {
           <DetailItem label="Eye Colors" value={capitalizeWords(eye_colors)} />
           <DetailItem label="Hair Colors" value={capitalizeWords(hair_colors)} />
           <DetailItem label="Skin Colors" value={capitalizeWords(skin_colors)} />
-          <DetailItem label="Languages" value={language.join(", ")} />
+          <DetailItem label="Languages" value={language} />
         </div>
         <Separator className="my-4" />
         <div className="my-4">

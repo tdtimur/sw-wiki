@@ -104,7 +104,9 @@ export default function CharacterPage({ params }: CharacterPageProps) {
             <DnaIcon size={18} />
             Species
           </h3>
-          <span className="text-xs italic mb-4">Click to view species</span>
+          {species.length > 0 && (
+            <span className="text-xs italic mb-4">Click to view species</span>
+          )}
           <SpeciesBadges ids={species} />
         </div>
 

@@ -4,26 +4,37 @@ import type { People } from "@/lib/models/people.model";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2Icon, SearchIcon } from "lucide-react";
+import { ChevronRightIcon, Loader2Icon, SearchIcon } from "lucide-react";
 import { getPeopleService } from "@/lib/services/people.service";
 import { toast } from "sonner";
-import { getRandomErrorText, getRandomLoadingText } from "@/lib/utils";
+import { getRandomErrorText } from "@/lib/utils";
 import CharacterCard, { CharacterCardSkeleton } from "./character-card";
 
 export default function CharacterFinder() {
   const peopleService = getPeopleService();
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState("");
+  const [hasMore, setHasMore] = useState(false);
+  const [total, setTotal] = useState(0);
   const [characters, setCharacters] = useState<People[]>([]);
 
   useEffect(() => {
+    // Resets the page to 1 if the keyword is non-empty.
+    if (keyword !== "") {
+      setCharacters([]);
+      if (page !== 1) setPage(1);
+    }
+
     // Debounce the search by 500ms to
     // avoid calling the API on every keystroke.
     const debouncer = setTimeout(async () => {
-      setCharacters([]);
+      setIsLoading(true);
       try {
         const responsePromise =
-          keyword === "" ? peopleService.list() : peopleService.search(keyword);
+          keyword === ""
+            ? peopleService.list(page)
+            : peopleService.search(page, keyword);
         const response = await responsePromise;
 
         if (!response.ok) {
@@ -33,7 +44,9 @@ export default function CharacterFinder() {
         }
 
         const searchResults = await response.json();
-        setCharacters(searchResults);
+        setHasMore(searchResults.next !== null && searchResults.next !== "");
+        setTotal(searchResults.count);
+        setCharacters((previous) => [...previous, ...searchResults.results]);
       } catch (error) {
         if (error instanceof Error) {
           toast.error(getRandomErrorText());
@@ -47,7 +60,7 @@ export default function CharacterFinder() {
     return () => {
       clearTimeout(debouncer);
     };
-  }, [keyword, peopleService]);
+  }, [peopleService, page, keyword]);
 
   return (
     <>
@@ -70,20 +83,16 @@ export default function CharacterFinder() {
           <div className="flex items-center gap-3">
             {" "}
             <Loader2Icon className="animate-spin" />
-            <span>{getRandomLoadingText()}</span>
+            <span>Connecting with The Force...</span>
           </div>
         ) : characters.length === 0 ? (
-          <span>{getRandomErrorText()}. Could not find anyone.</span>
+          <span>Could not find anyone.</span>
         ) : (
-          <span>Found {characters.length} characters.</span>
+          <span>Found {total} characters.</span>
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-items-center">
-        {isLoading ? (
-          [...Array(4)].map((_, i) => (
-            <CharacterCardSkeleton key={i} className="min-w-full" />
-          ))
-        ) : characters.length === 0 ? (
+        {characters.length === 0 ? (
           <div className="col-span-full text-center py-8 text-gray-500 text-lg dark:text-gray-400">
             🚫 There is a great disturbance in The Force.
           </div>
@@ -95,6 +104,26 @@ export default function CharacterFinder() {
               className="min-w-full"
             />
           ))
+        )}
+
+        {isLoading &&
+          [...Array(4)].map((_, i) => (
+            <CharacterCardSkeleton key={i} className="min-w-full" />
+          ))}
+        {hasMore && (
+          <Button variant={"outline"} onClick={() => setPage(page + 1)}>
+            {isLoading ? (
+              <>
+                <Loader2Icon className="animate-spin" />
+                Loading
+              </>
+            ) : (
+              <>
+                <ChevronRightIcon />
+                Load more
+              </>
+            )}
+          </Button>
         )}
       </div>
     </>

@@ -17,6 +17,13 @@ export type JsonResponse<T> = Omit<Response, "json"> & {
   json(): Promise<T>;
 };
 
+export type SwapiListResponse<T> = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+};
+
 /**
  * Create a mock `JsonResponse` for testing purposes.
  *

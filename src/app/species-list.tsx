@@ -2,22 +2,26 @@
 
 import type { Species } from "@/lib/models/species.model";
 import { useEffect, useState } from "react";
-import { Loader2Icon } from "lucide-react";
+import { ChevronRightIcon, Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
-import { getRandomErrorText, getRandomLoadingText } from "@/lib/utils";
+import { getRandomErrorText } from "@/lib/utils";
 import SpeciesCard, { SpeciesCardSkeleton } from "./species-card";
 import { getSpeciesService } from "@/lib/services/species.service";
+import { Button } from "@/components/ui/button";
 
 export default function SpeciesList() {
   const speciesService = getSpeciesService();
   const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [specieses, setSpecieses] = useState<Species[]>([]);
 
   useEffect(() => {
     const fetchSpecies = async () => {
-      setSpecieses([]);
+      setIsLoading(true);
       try {
-        const response = await speciesService.list();
+        const response = await speciesService.list(page);
 
         if (!response.ok) {
           toast.error(getRandomErrorText());
@@ -25,8 +29,10 @@ export default function SpeciesList() {
           return;
         }
 
-        const results = await response.json();
-        setSpecieses(results);
+        const speciesListData = await response.json();
+        setHasMore(speciesListData.next !== null && speciesListData.next !== "");
+        setTotal(speciesListData.count);
+        setSpecieses((previous) => [...previous, ...speciesListData.results]);
       } catch (error) {
         if (error instanceof Error) {
           toast.error(getRandomErrorText());
@@ -38,7 +44,7 @@ export default function SpeciesList() {
     };
 
     fetchSpecies();
-  }, [speciesService]);
+  }, [speciesService, page]);
 
   return (
     <div className="my-10">
@@ -48,20 +54,16 @@ export default function SpeciesList() {
           <div className="flex items-center gap-3">
             {" "}
             <Loader2Icon className="animate-spin" />
-            <span>{getRandomLoadingText()}</span>
+            <span>Logging in to the Jedi Archive server...</span>
           </div>
         ) : specieses.length === 0 ? (
           <span>Something wrong with the Jedi archive, could not find anyone.</span>
         ) : (
-          <span>Found {specieses.length} species.</span>
+          <span>Found {total} species.</span>
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-items-center">
-        {isLoading ? (
-          [...Array(4)].map((_, i) => (
-            <SpeciesCardSkeleton key={i} className="min-w-full" />
-          ))
-        ) : specieses.length === 0 ? (
+        {specieses.length === 0 ? (
           <div className="col-span-full text-center py-8 text-gray-500 text-lg dark:text-gray-400">
             🚫 There is a great disturbance in The Force.
           </div>
@@ -69,6 +71,26 @@ export default function SpeciesList() {
           specieses.map((species) => (
             <SpeciesCard key={species.url} species={species} className="min-w-full" />
           ))
+        )}
+
+        {isLoading &&
+          [...Array(4)].map((_, i) => (
+            <SpeciesCardSkeleton key={i} className="min-w-full" />
+          ))}
+        {hasMore && (
+          <Button variant={"outline"} onClick={() => setPage(page + 1)}>
+            {isLoading ? (
+              <>
+                <Loader2Icon className="animate-spin" />
+                Loading
+              </>
+            ) : (
+              <>
+                <ChevronRightIcon />
+                Load more
+              </>
+            )}
+          </Button>
         )}
       </div>
     </div>

@@ -1,5 +1,9 @@
 import type { PeopleServicer } from "../interfaces/people.interface";
-import { type JsonResponse, mockResponse } from "../interfaces/response.interface";
+import {
+  type JsonResponse,
+  mockResponse,
+  SwapiListResponse,
+} from "../interfaces/response.interface";
 import { fakePeople, type People } from "../models/people.model";
 
 /**
@@ -42,10 +46,16 @@ export class MockPeopleService implements PeopleServicer {
    *
    * @inheritdoc
    */
-  public async list(): Promise<JsonResponse<People[]>> {
-    console.debug("List people is called");
+  public async list(page: number): Promise<JsonResponse<SwapiListResponse<People>>> {
+    console.debug("List people is called with params: ", page);
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    return mockResponse(this.data);
+    const data: SwapiListResponse<People> = {
+      count: this.data.length,
+      next: `/api/species/?page=${page + 1}`,
+      previous: null,
+      results: this.data,
+    };
+    return mockResponse(data);
   }
 
   /**
@@ -56,13 +66,27 @@ export class MockPeopleService implements PeopleServicer {
    * @remarks
    * If the keyword is `"none"`, simulates no search results and returns an empty array.
    */
-  public async search(keyword: string): Promise<JsonResponse<People[]>> {
-    console.debug("Search people is called with params: ", keyword);
+  public async search(
+    page: number,
+    keyword: string
+  ): Promise<JsonResponse<SwapiListResponse<People>>> {
+    console.debug("Search people is called with params: ", page, keyword);
     await new Promise((resolve) => setTimeout(resolve, 1500));
     if (keyword === "none") {
-      return mockResponse([]);
+      return mockResponse({
+        count: 0,
+        next: null,
+        previous: null,
+        results: [],
+      });
     }
-    return mockResponse(this.data);
+    const data: SwapiListResponse<People> = {
+      count: this.data.length,
+      next: `/api/species/?search=${keyword}&page=${page + 1}`,
+      previous: null,
+      results: this.data,
+    };
+    return mockResponse(data);
   }
 }
 

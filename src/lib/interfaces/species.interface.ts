@@ -1,5 +1,5 @@
 import type { Species } from "../models/species.model";
-import type { JsonResponse } from "./response.interface";
+import type { JsonResponse, SwapiListResponse } from "./response.interface";
 
 /**
  * Provides access to Star Wars species.
@@ -30,7 +30,7 @@ export interface SpeciesLister {
    *
    * @returns A promise that resolves to a typed JSON response containing an array of species.
    */
-  list(): Promise<JsonResponse<Species[]>>;
+  list(page: number): Promise<JsonResponse<SwapiListResponse<Species>>>;
 }
 
 /**

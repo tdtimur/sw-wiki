@@ -1,5 +1,9 @@
 import type { SpeciesServicer } from "../interfaces/species.interface";
-import { type JsonResponse, mockResponse } from "../interfaces/response.interface";
+import {
+  type JsonResponse,
+  mockResponse,
+  SwapiListResponse,
+} from "../interfaces/response.interface";
 import { fakeSpecies, type Species } from "../models/species.model";
 
 /**
@@ -27,10 +31,16 @@ export class MockSpeciesService implements SpeciesServicer {
    *
    * @inheritdoc
    */
-  public async list(): Promise<JsonResponse<Species[]>> {
-    console.debug("List species is called");
+  public async list(page: number): Promise<JsonResponse<SwapiListResponse<Species>>> {
+    console.debug("List species is called with params: ", page);
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    return mockResponse(this.data);
+    const data: SwapiListResponse<Species> = {
+      count: this.data.length,
+      next: `/api/species/?page=${page + 1}`,
+      previous: null,
+      results: this.data,
+    };
+    return mockResponse(data);
   }
 
   /**
