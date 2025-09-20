@@ -18,6 +18,7 @@ export default function CharacterFinder() {
   const [hasMore, setHasMore] = useState(false);
   const [total, setTotal] = useState(0);
   const [characters, setCharacters] = useState<People[]>([]);
+  const [error, setError] = useState<Error | undefined>();
 
   useEffect(() => {
     // Resets the page to 1 if the keyword is non-empty.
@@ -30,6 +31,7 @@ export default function CharacterFinder() {
     // avoid calling the API on every keystroke.
     const debouncer = setTimeout(async () => {
       setIsLoading(true);
+      setError(undefined);
       try {
         const responsePromise =
           keyword === ""
@@ -40,6 +42,7 @@ export default function CharacterFinder() {
         if (!response.ok) {
           toast.error(getRandomErrorText());
           toast.error(`Status: ${response.status}`);
+          setError(new Error(`Status: ${response.status}`));
           return;
         }
 
@@ -50,6 +53,7 @@ export default function CharacterFinder() {
       } catch (error) {
         if (error instanceof Error) {
           toast.error(getRandomErrorText());
+          setError(error);
           console.debug(error);
         }
       } finally {
@@ -92,7 +96,7 @@ export default function CharacterFinder() {
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-items-center">
-        {characters.length === 0 ? (
+        {error !== undefined ? (
           <div className="col-span-full text-center py-8 text-gray-500 text-lg dark:text-gray-400">
             🚫 There is a great disturbance in The Force.
           </div>

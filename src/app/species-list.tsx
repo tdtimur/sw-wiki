@@ -16,16 +16,19 @@ export default function SpeciesList() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [specieses, setSpecieses] = useState<Species[]>([]);
+  const [error, setError] = useState<Error | undefined>();
 
   useEffect(() => {
     const fetchSpecies = async () => {
       setIsLoading(true);
+      setError(undefined);
       try {
         const response = await speciesService.list(page);
 
         if (!response.ok) {
           toast.error(getRandomErrorText());
           toast.error(`Status: ${response.status}`);
+          setError(new Error(`Status: ${response.status}`));
           return;
         }
 
@@ -37,6 +40,7 @@ export default function SpeciesList() {
         if (error instanceof Error) {
           toast.error(getRandomErrorText());
           console.debug(error);
+          setError(error);
         }
       } finally {
         setIsLoading(false);
@@ -63,7 +67,7 @@ export default function SpeciesList() {
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-items-center">
-        {specieses.length === 0 ? (
+        {error !== undefined ? (
           <div className="col-span-full text-center py-8 text-gray-500 text-lg dark:text-gray-400">
             🚫 There is a great disturbance in The Force.
           </div>
