@@ -1,12 +1,12 @@
 "use client";
 
+import type { Species } from "@/lib/models/species.model";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { getSpeciesService } from "@/lib/services/species.service";
 import { DnaOffIcon } from "lucide-react";
 import { parseSwapiPath } from "@/lib/utils";
 import Link from "next/link";
-import { Species } from "@/lib/models/species.model";
 
 interface SpeciesBadgesProps {
   ids: string[];
@@ -20,16 +20,20 @@ export default function SpeciesBadges({ ids }: SpeciesBadgesProps) {
     const fetchSpecies = async () => {
       try {
         const speciesService = getSpeciesService();
+
+        // ids elements may be a path instead of singular ID,
+        // so normalization is needed here.
         const speciesPromises = ids
           .map((id) => parseSwapiPath(id)?.id ?? "")
           .map((id) => speciesService.get(id));
         const speciesResponses = await Promise.all(speciesPromises);
-        const allOk = speciesResponses.every((res) => res.ok);
+        const allOk = speciesResponses.every(({ ok, status }) => ok && status === 200);
         if (!allOk) throw new Error("One or more species requests failed");
 
         const speciesData = await Promise.all(
           speciesResponses.map((res) => res.json())
         );
+
         setSpecieses(speciesData);
       } catch (err) {
         console.error("Error fetching species:", err);

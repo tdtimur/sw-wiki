@@ -41,7 +41,7 @@ export default function SpeciesCard({
   className?: string;
 }) {
   const { name, classification, url } = species;
-  const { id: speciesId } = parseSwapiPath(url) ?? { resource: "", id: "" };
+  const speciesId = parseSwapiPath(url)?.id ?? "";
 
   return (
     <Card className={cn(className)}>

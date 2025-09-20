@@ -10,12 +10,11 @@ import { getSpeciesService } from "@/lib/services/species.service";
 
 export default function SpeciesList() {
   const speciesService = getSpeciesService();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [specieses, setSpecieses] = useState<Species[]>([]);
 
   useEffect(() => {
     const fetchSpecies = async () => {
-      setIsLoading(true);
       setSpecieses([]);
       try {
         const response = await speciesService.list();

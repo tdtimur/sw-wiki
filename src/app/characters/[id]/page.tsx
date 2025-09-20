@@ -3,9 +3,8 @@
 import React, { useEffect, useState } from "react";
 import type { People } from "@/lib/models/people.model";
 import { getPeopleService } from "@/lib/services/people.service";
-import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { capitalizeWords } from "@/lib/utils";
+import { capitalizeWords, getRandomErrorText } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon, DnaIcon, FilmIcon } from "lucide-react";
 import Link from "next/link";
@@ -14,28 +13,26 @@ import FilmList from "./film-list";
 import SpeciesBadges from "./species-badges";
 import { DetailItem } from "@/components/detail-item";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
+import ErrorCard from "@/components/error-card";
 
 interface CharacterPageProps {
   params: Promise<{ id: string }>;
 }
 
 export default function CharacterPage({ params }: CharacterPageProps) {
-  const [character, setCharacter] = useState<People | null>(null);
-  const [loading, setLoading] = useState(true);
   const { id } = React.use(params);
+  const [character, setCharacter] = useState<People>();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let mounted = true;
-
     async function fetchCharacter() {
       try {
         const peopleService = getPeopleService();
         const response = await peopleService.get(id);
 
-        if (!mounted) return;
-
         if (response.status !== 200) {
-          notFound();
+          toast.error(`Failed to load character data. ${getRandomErrorText()}`);
           return;
         }
 
@@ -43,22 +40,22 @@ export default function CharacterPage({ params }: CharacterPageProps) {
         setCharacter(data);
       } catch (error) {
         console.error("Error when fetching a character:", error);
-        notFound();
+        toast.error(`Failed to load character data. ${getRandomErrorText()}`);
+        return;
       } finally {
-        if (mounted) setLoading(false);
+        setLoading(false);
       }
     }
 
     fetchCharacter();
-
-    return () => {
-      mounted = false;
-    };
   }, [id]);
 
   if (loading) return <CharacterPageSkeleton />;
 
-  if (!character) return null; // fallback if notFound was called
+  if (!character)
+    return (
+      <ErrorCard title="Failed to load character" message={getRandomErrorText()} />
+    );
 
   const {
     name,

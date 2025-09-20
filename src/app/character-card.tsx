@@ -42,7 +42,7 @@ export default function CharacterCard({
   className?: string;
 }) {
   const { name, birth_year, gender, url } = character;
-  const { id: characterId } = parseSwapiPath(url) ?? { resource: "", id: "" };
+  const characterId = parseSwapiPath(url)?.id ?? "";
 
   return (
     <Card className={cn(className)}>

@@ -3,7 +3,7 @@ type Config = {
   swapiHost: string;
 };
 
-const version = "v0.1.2";
+const version = "v0.1.3";
 
 let config: Config | undefined = undefined;
 

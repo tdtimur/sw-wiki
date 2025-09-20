@@ -5,7 +5,7 @@ import { getSpeciesService } from "@/lib/services/species.service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeftIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";
-import { capitalizeWords } from "@/lib/utils";
+import { capitalizeWords, getRandomErrorText } from "@/lib/utils";
 import { DetailItem } from "@/components/detail-item";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import CharacterList from "./character-list";
 import type { Species } from "@/lib/models/species.model";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
+import { toast } from "sonner";
+import ErrorCard from "@/components/error-card";
 
 interface SpeciesPageProps {
   params: Promise<{ id: string }>;
@@ -22,7 +24,6 @@ export default function SpeciesPage({ params }: SpeciesPageProps) {
   const { id } = React.use(params);
   const [species, setSpecies] = useState<Species | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchSpecies = async () => {
@@ -30,14 +31,13 @@ export default function SpeciesPage({ params }: SpeciesPageProps) {
         const speciesService = getSpeciesService();
         const response = await speciesService.get(id);
         if (!response.ok) {
-          setError(true);
+          toast.error(`Failed to load species data. ${getRandomErrorText()}`);
           return;
         }
         const data = await response.json();
         setSpecies(data);
       } catch (err) {
         console.error("Error fetching species:", err);
-        setError(true);
       } finally {
         setLoading(false);
       }
@@ -50,8 +50,8 @@ export default function SpeciesPage({ params }: SpeciesPageProps) {
     return <SpeciesPageSkeleton />;
   }
 
-  if (error || !species) {
-    return <p>Species not found.</p>;
+  if (!species) {
+    return <ErrorCard title="Failed to load species" message={getRandomErrorText()} />;
   }
 
   const {
@@ -99,7 +99,7 @@ export default function SpeciesPage({ params }: SpeciesPageProps) {
         <div className="my-4">
           <h3 className="text-xl font-semibold flex items-center gap-2">
             <UsersIcon size={18} />
-            Characters in this species
+            Characters
           </h3>
           <CharacterList ids={people} />
         </div>

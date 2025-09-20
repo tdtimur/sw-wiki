@@ -12,7 +12,7 @@ import CharacterCard, { CharacterCardSkeleton } from "./character-card";
 
 export default function CharacterFinder() {
   const peopleService = getPeopleService();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [keyword, setKeyword] = useState("");
   const [characters, setCharacters] = useState<People[]>([]);
 
@@ -20,7 +20,6 @@ export default function CharacterFinder() {
     // Debounce the search by 500ms to
     // avoid calling the API on every keystroke.
     const debouncer = setTimeout(async () => {
-      setIsLoading(true);
       setCharacters([]);
       try {
         const responsePromise =
