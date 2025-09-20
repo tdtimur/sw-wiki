@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { capitalizeWords, cn, parseSwapiPath } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 
 /**
  * A card component that displays basic information about a Star Wars character.
@@ -53,11 +54,10 @@ export default function SpeciesCard({
         </CardDescription>
         {speciesId !== "" && (
           <CardAction>
-            <Link
-              className="text-md underline text-blue-600"
-              href={`/species/${speciesId}`}
-            >
-              View
+            <Link href={`/species/${speciesId}`}>
+              <Button variant={"outline"} size={"sm"}>
+                <span>View</span>
+              </Button>
             </Link>
           </CardAction>
         )}
