@@ -42,7 +42,7 @@ export default function SpeciesList() {
   }, [speciesService]);
 
   return (
-    <>
+    <div className="my-10">
       <h1 className="text-2xl text-bold my-4">Or, find characters by their species</h1>
       <div className="flex items-start gap-3 mb-5">
         {isLoading ? (
@@ -72,6 +72,6 @@ export default function SpeciesList() {
           ))
         )}
       </div>
-    </>
+    </div>
   );
 }
