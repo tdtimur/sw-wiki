@@ -2,13 +2,14 @@
 
 A simple **Star Wars Wiki** built with [Next.js](https://nextjs.org/).  
 Search for characters from the Star Wars universe and view detailed information on each character.
+This uses API provided by [swapi.dev](https://swapi.dev).
 
 ## Features
 
 - 🔍 Search Star Wars characters
 - 👤 Per-character detail pages (server-rendered)
 - 🎨 Styled with Tailwind CSS
-- 🛠 Mock services for development (SWAPI-like data)
+- 🛠 Mock services for development and tests (SWAPI-like data)
 - ✅ Linting and build setup included
 
 ## Environment Variables
@@ -73,8 +74,8 @@ src/
 
 ## Tech Stack
 
-- [Next.js 13+ App Router](https://nextjs.org/docs/app)
-- [React](https://react.dev/)
+- [Next.js 15](https://nextjs.org)
+- [swapi.dev](https://swapi.dev)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [shadcn/ui](https://ui.shadcn.com/)
 - TypeScript
