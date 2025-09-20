@@ -88,13 +88,25 @@ export default function CharacterPage({ params }: CharacterPageProps) {
       </CardHeader>
       <CardContent>
         <div className="divide-y divide-gray-200 dark:divide-gray-700">
-          <DetailItem label="Birth Year" value={birth_year} />
-          <DetailItem label="Gender" value={capitalizeWords(gender)} />
-          <DetailItem label="Eye Color" value={capitalizeWords(eye_color)} />
-          <DetailItem label="Hair Color" value={capitalizeWords(hair_color)} />
-          <DetailItem label="Skin Color" value={capitalizeWords(skin_color)} />
-          <DetailItem label="Height" value={`${height} cm`} />
-          <DetailItem label="Mass" value={`${mass} kg`} />
+          <DetailItem label="Birth Year" value={birth_year.replaceAll("n/a", "-")} />
+          <DetailItem
+            label="Gender"
+            value={capitalizeWords(gender.replaceAll("n/a", "-"))}
+          />
+          <DetailItem
+            label="Eye Color"
+            value={capitalizeWords(eye_color.replaceAll("n/a", "-"))}
+          />
+          <DetailItem
+            label="Hair Color"
+            value={capitalizeWords(hair_color.replaceAll("n/a", "-"))}
+          />
+          <DetailItem
+            label="Skin Color"
+            value={capitalizeWords(skin_color.replaceAll("n/a", "-"))}
+          />
+          <DetailItem label="Height" value={`${height.replaceAll("n/a", "-")} cm`} />
+          <DetailItem label="Mass" value={`${mass.replaceAll("n/a", "-")} kg`} />
         </div>
 
         <Separator className="my-4" />
