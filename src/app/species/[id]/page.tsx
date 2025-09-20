@@ -1,5 +1,7 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { getSpeciesService } from "@/lib/services/species.service";
-import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeftIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";
@@ -8,79 +10,134 @@ import { DetailItem } from "@/components/detail-item";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import CharacterList from "./character-list";
+import type { Species } from "@/lib/models/species.model";
+import { Skeleton } from "@/components/ui/skeleton";
+import React from "react";
 
 interface SpeciesPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function SpeciesPage({ params }: SpeciesPageProps) {
-  const { id } = await params;
-  const speciesService = getSpeciesService();
+export default function SpeciesPage({ params }: SpeciesPageProps) {
+  const { id } = React.use(params);
+  const [species, setSpecies] = useState<Species | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  try {
-    const speciesResponse = await speciesService.get(id);
-    if (speciesResponse.status !== 200) {
-      notFound();
-    }
+  useEffect(() => {
+    const fetchSpecies = async () => {
+      try {
+        const speciesService = getSpeciesService();
+        const response = await speciesService.get(id);
+        if (!response.ok) {
+          setError(true);
+          return;
+        }
+        const data = await response.json();
+        setSpecies(data);
+      } catch (err) {
+        console.error("Error fetching species:", err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    const {
-      name,
-      classification,
-      designation,
-      average_height,
-      average_lifespan,
-      eye_colors,
-      hair_colors,
-      skin_colors,
-      language,
-      people,
-    } = await speciesResponse.json();
+    fetchSpecies();
+  }, [id]);
 
-    return (
-      <Card className="mt-10">
-        <CardHeader>
-          <div className="flex item-center justify-between">
-            <CardTitle className="text-lg md:text-xl self-center">
-              Species: <span className="text-lg md:text-3xl text-blue-600">{name}</span>
-            </CardTitle>
-            <Link href={"/"}>
-              <Button variant={"ghost"}>
-                <ArrowLeftIcon />
-                <span>Back</span>
-              </Button>
-            </Link>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
-            <DetailItem label="Name" value={name} />
-            <DetailItem
-              label="Classification"
-              value={capitalizeWords(classification)}
-            />
-            <DetailItem label="Designation" value={capitalizeWords(designation)} />
-            <DetailItem label="Average Height" value={`${average_height} cm`} />
-            <DetailItem label="Average Lifespan" value={`${average_lifespan} years`} />
-            <DetailItem label="Eye Colors" value={capitalizeWords(eye_colors)} />
-            <DetailItem label="Hair Colors" value={capitalizeWords(hair_colors)} />
-            <DetailItem label="Skin Colors" value={capitalizeWords(skin_colors)} />
-            <DetailItem label="Languages" value={language.join(", ")} />
-          </div>
-          <Separator className="my-4" />
-          <div className="my-4">
-            <h3 className="text-xl font-semibold flex items-center gap-2">
-              <UsersIcon size={18} />
-              Characters in this species
-            </h3>
-            <CharacterList ids={people} />
-          </div>
-        </CardContent>
-      </Card>
-    );
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error("Error when fetching a character:", error);
-    }
-    notFound();
+  if (loading) {
+    return <SpeciesPageSkeleton />;
   }
+
+  if (error || !species) {
+    return <p>Species not found.</p>;
+  }
+
+  const {
+    name,
+    classification,
+    designation,
+    average_height,
+    average_lifespan,
+    eye_colors,
+    hair_colors,
+    skin_colors,
+    language,
+    people,
+  } = species;
+
+  return (
+    <Card className="mt-10">
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-lg md:text-xl self-center">
+            <h4 className="text-sm">Viewing species:</h4>
+            <h3 className="text-3xl md:text-4xl text-emerald-600">{name}</h3>
+          </CardTitle>
+          <Link href={"/"}>
+            <Button variant={"ghost"}>
+              <ArrowLeftIcon />
+              <span>Back</span>
+            </Button>
+          </Link>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+          <DetailItem label="Name" value={name} />
+          <DetailItem label="Classification" value={capitalizeWords(classification)} />
+          <DetailItem label="Designation" value={capitalizeWords(designation)} />
+          <DetailItem label="Average Height" value={`${average_height} cm`} />
+          <DetailItem label="Average Lifespan" value={`${average_lifespan} years`} />
+          <DetailItem label="Eye Colors" value={capitalizeWords(eye_colors)} />
+          <DetailItem label="Hair Colors" value={capitalizeWords(hair_colors)} />
+          <DetailItem label="Skin Colors" value={capitalizeWords(skin_colors)} />
+          <DetailItem label="Languages" value={language.join(", ")} />
+        </div>
+        <Separator className="my-4" />
+        <div className="my-4">
+          <h3 className="text-xl font-semibold flex items-center gap-2">
+            <UsersIcon size={18} />
+            Characters in this species
+          </h3>
+          <CharacterList ids={people} />
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function SpeciesPageSkeleton() {
+  return (
+    <Card className="mt-10 animate-pulse">
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-lg md:text-xl self-center">
+            <Skeleton className="h-8 w-48" />
+          </CardTitle>
+          <Skeleton className="h-8 w-24 rounded" />
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="divide-y divide-gray-200 dark:divide-gray-700 space-y-2">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="h-4 w-36" />
+          <Skeleton className="h-4 w-28" />
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="h-4 w-36" />
+          <Skeleton className="h-4 w-48" />
+        </div>
+        <Separator className="my-4" />
+        <div className="my-4 space-y-2">
+          <Skeleton className="h-6 w-64" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+        </div>
+      </CardContent>
+    </Card>
+  );
 }

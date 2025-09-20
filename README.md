@@ -130,5 +130,5 @@ src/
 
 ## Notes
 
-- Character details are fetched server-side on `/characters/[id]`.
+- All pages are client-side.
 - Mock services simulate SWAPI responses for local development.
