@@ -15,6 +15,7 @@ import Link from "next/link";
 import { capitalizeWords, cn, parseSwapiPath } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 /**
  * A card component that displays basic information about a Star Wars character.
@@ -59,7 +60,11 @@ export default function CharacterCard({
         {characterId !== "" && (
           <CardAction>
             <Link href={`/characters/${characterId}`}>
-              <Button variant={"outline"} size={"sm"}>
+              <Button
+                variant={"outline"}
+                size={"sm"}
+                onClick={() => toast.info("Loading the character info...")}
+              >
                 <span>View</span>
               </Button>
             </Link>

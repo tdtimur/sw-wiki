@@ -14,9 +14,10 @@ import Link from "next/link";
 import { capitalizeWords, cn, parseSwapiPath } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 /**
- * A card component that displays basic information about a Star Wars character.
+ * A card component that displays basic information about a species in Star Wars universe.
  *
  * @remarks
  * Shows the species' name and classification.
@@ -55,7 +56,11 @@ export default function SpeciesCard({
         {speciesId !== "" && (
           <CardAction>
             <Link href={`/species/${speciesId}`}>
-              <Button variant={"outline"} size={"sm"}>
+              <Button
+                onClick={() => toast.info("Loading the species info")}
+                variant={"outline"}
+                size={"sm"}
+              >
                 <span>View</span>
               </Button>
             </Link>
