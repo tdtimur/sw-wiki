@@ -1,7 +1,7 @@
 "use client";
 
 import type { People } from "@/lib/models/people.model";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronRightIcon, Loader2Icon, SearchIcon } from "lucide-react";
@@ -9,6 +9,7 @@ import { getPeopleService } from "@/lib/services/people.service";
 import { toast } from "sonner";
 import { getRandomErrorText } from "@/lib/utils";
 import CharacterCard, { CharacterCardSkeleton } from "./character-card";
+import { useIsMobile } from "@/lib/hooks/isMobile";
 
 export default function CharacterFinder() {
   const peopleService = getPeopleService();
@@ -20,24 +21,47 @@ export default function CharacterFinder() {
   const [characters, setCharacters] = useState<People[]>([]);
   const [error, setError] = useState<Error | undefined>();
 
+  const loadMoreRef = useRef<HTMLButtonElement | null>(null);
+  const isMobile = useIsMobile();
+
   useEffect(() => {
-    // Resets the page to 1 if the keyword is non-empty.
+    // intersection observer for infinite scroll (mobile only)
+    if (!isMobile || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoading) {
+          setPage((prev) => prev + 1);
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    const currentRef = loadMoreRef.current;
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, [isMobile, hasMore, isLoading]);
+
+  useEffect(() => {
     if (keyword !== "") {
       setCharacters([]);
       if (page !== 1) setPage(1);
     }
 
-    // Debounce the search by 500ms to
-    // avoid calling the API on every keystroke.
     const debouncer = setTimeout(async () => {
       setIsLoading(true);
       setError(undefined);
       try {
-        const responsePromise =
+        const response =
           keyword === ""
-            ? peopleService.list(page)
-            : peopleService.search(page, keyword);
-        const response = await responsePromise;
+            ? await peopleService.list(page)
+            : await peopleService.search(page, keyword);
 
         if (!response.ok) {
           toast.error(getRandomErrorText());
@@ -49,21 +73,23 @@ export default function CharacterFinder() {
         const searchResults = await response.json();
         setHasMore(searchResults.next !== null && searchResults.next !== "");
         setTotal(searchResults.count);
-        setCharacters((previous) => [...previous, ...searchResults.results]);
+
+        // append new results
+        setCharacters((previous) => [
+          ...(page === 1 ? [] : previous),
+          ...searchResults.results,
+        ]);
       } catch (error) {
         if (error instanceof Error) {
           toast.error(getRandomErrorText());
           setError(error);
-          console.debug(error);
         }
       } finally {
         setIsLoading(false);
       }
     }, 500);
 
-    return () => {
-      clearTimeout(debouncer);
-    };
+    return () => clearTimeout(debouncer);
   }, [peopleService, page, keyword]);
 
   return (
@@ -85,7 +111,6 @@ export default function CharacterFinder() {
       <div className="flex items-start gap-3 mb-5">
         {isLoading ? (
           <div className="flex items-center gap-3">
-            {" "}
             <Loader2Icon className="animate-spin" />
             <span>Connecting with The Force...</span>
           </div>
@@ -114,8 +139,13 @@ export default function CharacterFinder() {
           [...Array(4)].map((_, i) => (
             <CharacterCardSkeleton key={i} className="min-w-full" />
           ))}
+
         {hasMore && (
-          <Button variant={"outline"} onClick={() => setPage(page + 1)}>
+          <Button
+            ref={loadMoreRef}
+            variant="outline"
+            onClick={() => !isMobile && setPage(page + 1)}
+          >
             {isLoading ? (
               <>
                 <Loader2Icon className="animate-spin" />
@@ -124,7 +154,7 @@ export default function CharacterFinder() {
             ) : (
               <>
                 <ChevronRightIcon />
-                Load more
+                {isMobile ? "Scroll to load more" : "Load more"}
               </>
             )}
           </Button>
