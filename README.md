@@ -32,6 +32,25 @@ NEXT_PUBLIC_SWAPI_HOST=mock
 
 ## Getting Started
 
+### 0. Node version
+
+To minimize inconsistencies between environments, we (optionally) use `nvm`.
+The version listed in the `.nvmrc` is `v22.15`. Now I'm sure other `node` versions
+would work just as well (as long as the version difference is not too far away),
+but just to be extra safe, I suggest you use `nvm` as well. In the project directory:
+
+```bash
+# Install compatible node version
+nvm install
+```
+
+Then to use it:
+
+```bash
+# Install compatible node version
+nvm use
+```
+
 ### 1. Install dependencies
 
 ```bash
