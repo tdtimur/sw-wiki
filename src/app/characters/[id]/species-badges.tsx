@@ -29,7 +29,7 @@ export default async function SpeciesBadges({ ids }: { ids: string[] }) {
       throw new Error("One or more species requests failed");
     }
     const specieses = await Promise.all(
-      speciesResponses.map((response) => response.json()),
+      speciesResponses.map((response) => response.json())
     );
 
     if (specieses.length === 0) {
@@ -44,10 +44,7 @@ export default async function SpeciesBadges({ ids }: { ids: string[] }) {
     return (
       <div className="flex flex-wrap gap-2 my-2">
         {specieses.map((species) => (
-          <Badge
-            key={species.name}
-            className="bg-emerald-200 text-black text-md"
-          >
+          <Badge key={species.name} className="bg-emerald-200 text-black text-md">
             {species.name}
           </Badge>
         ))}

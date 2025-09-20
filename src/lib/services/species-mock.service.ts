@@ -1,8 +1,5 @@
 import type { SpeciesGetter } from "../interfaces/species.interface";
-import {
-  type JsonResponse,
-  mockResponse,
-} from "../interfaces/response.interface";
+import { type JsonResponse, mockResponse } from "../interfaces/response.interface";
 import { fakeSpecies, type Species } from "../models/species.model";
 
 /**

@@ -59,14 +59,8 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
             <DetailItem label="Birth Year" value={birth_year} />
             <DetailItem label="Gender" value={capitalizeWords(gender)} />
             <DetailItem label="Eye Color" value={capitalizeWords(eye_color)} />
-            <DetailItem
-              label="Hair Color"
-              value={capitalizeWords(hair_color)}
-            />
-            <DetailItem
-              label="Skin Color"
-              value={capitalizeWords(skin_color)}
-            />
+            <DetailItem label="Hair Color" value={capitalizeWords(hair_color)} />
+            <DetailItem label="Skin Color" value={capitalizeWords(skin_color)} />
             <DetailItem label="Height" value={`${height} cm`} />
             <DetailItem label="Mass" value={`${mass} kg`} />
           </div>

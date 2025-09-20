@@ -47,7 +47,4 @@ export interface PeopleGetter {
  * - search for people (`PeopleSearcher`)
  * - fetch a single person by ID (`PeopleGetter`)
  */
-export interface PeopleServicer
-  extends PeopleGetter,
-    PeopleLister,
-    PeopleSearcher {}
+export interface PeopleServicer extends PeopleGetter, PeopleLister, PeopleSearcher {}

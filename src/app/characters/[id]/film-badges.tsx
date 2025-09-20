@@ -26,9 +26,7 @@ export default async function FilmBadges({ ids }: { ids: string[] }) {
     if (!allOk) {
       throw new Error("One or more film requests failed");
     }
-    const films = await Promise.all(
-      filmResponses.map((response) => response.json()),
-    );
+    const films = await Promise.all(filmResponses.map((response) => response.json()));
 
     if (films.length === 0) {
       return <span>Never appeared in any movie</span>;

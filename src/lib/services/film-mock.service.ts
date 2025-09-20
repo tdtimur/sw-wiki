@@ -1,8 +1,5 @@
 import type { FilmGetter } from "../interfaces/film.interface";
-import {
-  type JsonResponse,
-  mockResponse,
-} from "../interfaces/response.interface";
+import { type JsonResponse, mockResponse } from "../interfaces/response.interface";
 import { fakeFilms, type Film } from "../models/film.model";
 
 /**

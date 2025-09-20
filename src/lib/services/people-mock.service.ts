@@ -1,8 +1,5 @@
 import type { PeopleServicer } from "../interfaces/people.interface";
-import {
-  type JsonResponse,
-  mockResponse,
-} from "../interfaces/response.interface";
+import { type JsonResponse, mockResponse } from "../interfaces/response.interface";
 import { fakePeople, type People } from "../models/people.model";
 
 /**

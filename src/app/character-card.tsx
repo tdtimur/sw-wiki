@@ -73,11 +73,7 @@ export default function CharacterCard({
   );
 }
 
-export function CharacterCardSkeleton({
-  className = "",
-}: {
-  className?: string;
-}) {
+export function CharacterCardSkeleton({ className = "" }: { className?: string }) {
   return (
     <Card className={className}>
       <CardHeader>
