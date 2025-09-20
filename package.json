@@ -1,6 +1,6 @@
 {
   "name": "sw-wiki",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -9,7 +9,7 @@
     "lint": "eslint",
     "lint:fix": "eslint . --fix",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watchAll"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.16",

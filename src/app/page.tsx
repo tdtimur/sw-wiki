@@ -71,8 +71,10 @@ export default function CharacterList() {
             <Loader2Icon className="animate-spin" />
             <span>{getRandomLoadingText()}</span>
           </div>
+        ) : characters.length === 0 ? (
+          <span>{getRandomErrorText()}. Could not find anyone.</span>
         ) : (
-          <span>Found {characters.length} people</span>
+          <span>Found {characters.length} characters.</span>
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-items-center">
@@ -82,7 +84,7 @@ export default function CharacterList() {
           ))
         ) : characters.length === 0 ? (
           <div className="col-span-full text-center py-8 text-gray-500 text-lg dark:text-gray-400">
-            🚫 {getRandomErrorText()}
+            🚫 There is a great disturbance in The Force.
           </div>
         ) : (
           characters.map((character) => (

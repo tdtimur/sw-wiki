@@ -10,7 +10,8 @@ This uses API provided by [swapi.dev](https://swapi.dev).
 - 👤 Per-character detail pages (server-rendered)
 - 🎨 Styled with Tailwind CSS
 - 🛠 Mock services for development and tests (SWAPI-like data)
-- ✅ Linting and build setup included
+- 🛠 Run tests with Jest
+- ✅ Linting, formatting, and build setup included
 
 ## Environment Variables
 
@@ -51,13 +52,40 @@ The app will be available at [http://localhost:3000](http://localhost:3000).
 npm run lint
 ```
 
-### 4. Build for production
+Running this command will automatically report formatting issues detected
+by `prettier` as error-level. To fix formatting issues automatically, run:
+
+```bash
+npm run lint:fix
+```
+
+This will run `eslint` with `prettier` integration with the `--fix` flag to
+automatically format your codebase based on the `prettier` configuration.
+
+### 4. Run the tests
+
+To run all tests once, run:
+
+```bash
+npm run test
+```
+
+If you want to enable watch mode, run:
+
+```bash
+npm run test:watch
+```
+
+This will keep jest running and it will rerun the tests when
+there's a change to the code.
+
+### 5. Build for production
 
 ```bash
 npm run build
 ```
 
-### 5. Start the production build
+### 6. Start the production build
 
 ```bash
 npm start
@@ -77,6 +105,7 @@ src/
 - [Next.js 15](https://nextjs.org)
 - [swapi.dev](https://swapi.dev)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [Jest](https://jestjs.io/)
 - [shadcn/ui](https://ui.shadcn.com/)
 - TypeScript
 
