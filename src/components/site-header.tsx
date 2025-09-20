@@ -2,6 +2,7 @@
 
 import getConfig from "@/lib/config";
 import Link from "next/link";
+import { CharacterSearch } from "./character-search";
 
 /**
  * The main site header component.
@@ -25,7 +26,8 @@ export function SiteHeader() {
           <Link href="/" className="flex items-center gap-3">
             <span className="text-foreground font-bold">SW Wiki</span>
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-w-sm">
+            <CharacterSearch />
             <Link href={"https://github.com/tdtimur/sw-wiki"} target="_blank">
               <svg
                 className="h-5 w-5"

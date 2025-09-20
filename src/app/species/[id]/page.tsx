@@ -85,15 +85,35 @@ export default function SpeciesPage({ params }: SpeciesPageProps) {
       </CardHeader>
       <CardContent>
         <div className="divide-y divide-gray-200 dark:divide-gray-700">
-          <DetailItem label="Name" value={name} />
-          <DetailItem label="Classification" value={capitalizeWords(classification)} />
-          <DetailItem label="Designation" value={capitalizeWords(designation)} />
-          <DetailItem label="Average Height" value={`${average_height} cm`} />
-          <DetailItem label="Average Lifespan" value={`${average_lifespan} years`} />
-          <DetailItem label="Eye Colors" value={capitalizeWords(eye_colors)} />
-          <DetailItem label="Hair Colors" value={capitalizeWords(hair_colors)} />
-          <DetailItem label="Skin Colors" value={capitalizeWords(skin_colors)} />
-          <DetailItem label="Languages" value={language} />
+          <DetailItem
+            label="Classification"
+            value={capitalizeWords(classification.replaceAll("n/a", "-"))}
+          />
+          <DetailItem
+            label="Designation"
+            value={capitalizeWords(designation.replaceAll("n/a", "-"))}
+          />
+          <DetailItem
+            label="Average Height"
+            value={`${average_height.replaceAll("n/a", "-")} cm`}
+          />
+          <DetailItem
+            label="Average Lifespan"
+            value={`${average_lifespan.replaceAll("n/a", "-")} years`}
+          />
+          <DetailItem
+            label="Eye Colors"
+            value={capitalizeWords(eye_colors.replaceAll("n/a", "-"))}
+          />
+          <DetailItem
+            label="Hair Colors"
+            value={capitalizeWords(hair_colors.replaceAll("n/a", "-"))}
+          />
+          <DetailItem
+            label="Skin Colors"
+            value={capitalizeWords(skin_colors.replaceAll("n/a", "-"))}
+          />
+          <DetailItem label="Languages" value={language.replaceAll("n/a", "-")} />
         </div>
         <Separator className="my-4" />
         <div className="my-4">

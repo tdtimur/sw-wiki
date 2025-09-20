@@ -9,6 +9,7 @@ This uses API provided by [swapi.dev](https://swapi.dev).
 - 🔍 Search Star Wars characters
 - 👤 Per-character detail pages (server-rendered)
 - 🎨 Styled with Tailwind CSS
+- 📱 Responsive design, infinite scroll pattern on mobile.
 - 🛠 Mock services for development and tests (SWAPI-like data)
 - 🛠 Run tests with Jest
 - ✅ Linting, formatting, and build setup included

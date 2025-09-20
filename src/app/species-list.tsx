@@ -1,13 +1,14 @@
 "use client";
 
 import type { Species } from "@/lib/models/species.model";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronRightIcon, Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
 import { getRandomErrorText } from "@/lib/utils";
 import SpeciesCard, { SpeciesCardSkeleton } from "./species-card";
 import { getSpeciesService } from "@/lib/services/species.service";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/lib/hooks/isMobile";
 
 export default function SpeciesList() {
   const speciesService = getSpeciesService();
@@ -17,6 +18,33 @@ export default function SpeciesList() {
   const [total, setTotal] = useState(0);
   const [specieses, setSpecieses] = useState<Species[]>([]);
   const [error, setError] = useState<Error | undefined>();
+
+  const loadMoreRef = useRef<HTMLButtonElement | null>(null);
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    // intersection observer for infinite scroll (mobile only)
+    if (!isMobile || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoading) {
+          setPage((prev) => prev + 1);
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    const currentRef = loadMoreRef.current;
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, [isMobile, hasMore, isLoading]);
 
   useEffect(() => {
     const fetchSpecies = async () => {
@@ -52,7 +80,7 @@ export default function SpeciesList() {
 
   return (
     <div className="my-10">
-      <h1 className="text-2xl text-bold my-4">Or, find characters by their species</h1>
+      <h1 className="text-2xl text-bold my-4">Species explorer</h1>
       <div className="flex items-start gap-3 mb-5">
         {isLoading ? (
           <div className="flex items-center gap-3">
@@ -82,7 +110,11 @@ export default function SpeciesList() {
             <SpeciesCardSkeleton key={i} className="min-w-full" />
           ))}
         {hasMore && (
-          <Button variant={"outline"} onClick={() => setPage(page + 1)}>
+          <Button
+            ref={loadMoreRef}
+            variant="outline"
+            onClick={() => !isMobile && setPage(page + 1)}
+          >
             {isLoading ? (
               <>
                 <Loader2Icon className="animate-spin" />
@@ -91,7 +123,7 @@ export default function SpeciesList() {
             ) : (
               <>
                 <ChevronRightIcon />
-                Load more
+                {isMobile ? "Scroll to load more" : "Load more"}
               </>
             )}
           </Button>
