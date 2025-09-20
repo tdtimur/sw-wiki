@@ -2,6 +2,8 @@ import { Badge } from "@/components/ui/badge";
 import { getSpeciesService } from "@/lib/services/species.service";
 import { notFound } from "next/navigation";
 import { DnaOffIcon } from "lucide-react";
+import { parseSwapiPath } from "@/lib/utils";
+import Link from "next/link";
 
 /**
  * Displays a list of species as badge components.
@@ -22,7 +24,9 @@ export default async function SpeciesBadges({ ids }: { ids: string[] }) {
   const speciesService = getSpeciesService();
 
   try {
-    const speciesPromises = ids.map((id) => speciesService.get(id));
+    const speciesPromises = ids
+      .map((id) => parseSwapiPath(id)?.id ?? "")
+      .map((id) => speciesService.get(id));
     const speciesResponses = await Promise.all(speciesPromises);
     const allOk = speciesResponses.every((response) => response.ok);
     if (!allOk) {
@@ -45,7 +49,9 @@ export default async function SpeciesBadges({ ids }: { ids: string[] }) {
       <div className="flex flex-wrap gap-2 my-2">
         {specieses.map((species) => (
           <Badge key={species.name} className="bg-emerald-200 text-black text-md">
-            {species.name}
+            <Link href={`/species/${parseSwapiPath(species.url)?.id}`}>
+              {species.name}
+            </Link>
           </Badge>
         ))}
       </div>

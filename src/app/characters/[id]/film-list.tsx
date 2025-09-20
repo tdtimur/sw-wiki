@@ -1,12 +1,13 @@
 import { getFilmService } from "@/lib/services/film.service";
+import { parseSwapiPath } from "@/lib/utils";
 import { notFound } from "next/navigation";
 
 /**
- * Displays a list of films as badges.
+ * Displays a list of films.
  *
  * @remarks
  * This is a **server component** that fetches film data for the given IDs
- * and renders them as a list of badge components.
+ * and renders them as a list.
  *
  * @param props - Component props.
  * @param props.ids - An array of SWAPI film IDs to fetch and display.
@@ -16,11 +17,13 @@ import { notFound } from "next/navigation";
  * <FilmBadges ids={["1", "2", "3"]} />
  * ```
  */
-export default async function FilmBadges({ ids }: { ids: string[] }) {
+export default async function FilmList({ ids }: { ids: string[] }) {
   const filmService = getFilmService();
 
   try {
-    const filmPromises = ids.map((id) => filmService.get(id));
+    const filmPromises = ids
+      .map((id) => parseSwapiPath(id)?.id ?? "")
+      .map((id) => filmService.get(id));
     const filmResponses = await Promise.all(filmPromises);
     const allOk = filmResponses.every((response) => response.ok);
     if (!allOk) {

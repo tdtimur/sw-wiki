@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon, DnaIcon, FilmIcon } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import FilmBadges from "./film-badges";
+import FilmList from "./film-list";
 import SpeciesBadges from "./species-badges";
+import { DetailItem } from "@/components/detail-item";
 
 interface CharacterPageProps {
   params: Promise<{ id: string }>;
@@ -70,6 +71,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
               <DnaIcon size={18} />
               Species
             </h3>
+            <span className="text-xs italic mb-4">Click to view species</span>
             <SpeciesBadges ids={species} />
           </div>
           <div className="my-4">
@@ -77,28 +79,15 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
               <FilmIcon size={18} />
               Film appearances
             </h3>
-            <FilmBadges ids={films} />
+            <FilmList ids={films} />
           </div>
         </CardContent>
       </Card>
     );
-  } catch (err) {
-    if (err instanceof Error) {
-      console.error("Error when fetching a character:", err);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error when fetching a character:", error);
     }
     notFound();
   }
-}
-
-function DetailItem({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="py-2 flex gap-2">
-      <div className="flex-auto max-w-[40%] text-lg font-medium text-gray-500 dark:text-gray-400">
-        {label}
-      </div>
-      <div className="flex-auto text-lg col-span-2 text-gray-900 dark:text-gray-100">
-        {value || "—"}
-      </div>
-    </div>
-  );
 }

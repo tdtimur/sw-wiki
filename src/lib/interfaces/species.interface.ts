@@ -20,3 +20,24 @@ export interface SpeciesGetter {
    */
   get(id: string): Promise<JsonResponse<Species>>;
 }
+
+/**
+ * Defines a service that can fetch a full list of `Species`.
+ */
+export interface SpeciesLister {
+  /**
+   * Retrieve all species.
+   *
+   * @returns A promise that resolves to a typed JSON response containing an array of species.
+   */
+  list(): Promise<JsonResponse<Species[]>>;
+}
+
+/**
+ * A service contract for working with `Species`.
+ *
+ * Combines the abilities to:
+ * - fetch a list of people (`SpeciesLister`)
+ * - fetch a single person by ID (`SpeciesGetter`)
+ */
+export interface SpeciesServicer extends SpeciesGetter, SpeciesLister {}

@@ -1,4 +1,4 @@
-import type { SpeciesGetter } from "../interfaces/species.interface";
+import type { SpeciesServicer } from "../interfaces/species.interface";
 import { type JsonResponse, mockResponse } from "../interfaces/response.interface";
 import { fakeSpecies, type Species } from "../models/species.model";
 
@@ -10,7 +10,7 @@ import { fakeSpecies, type Species } from "../models/species.model";
  * - Uses an in-memory array of species (`seedData`).
  * - Simulates network latency with a 1.5s delay.
  */
-export class MockSpeciesService implements SpeciesGetter {
+export class MockSpeciesService implements SpeciesServicer {
   private data: Species[];
 
   /**
@@ -20,6 +20,17 @@ export class MockSpeciesService implements SpeciesGetter {
    */
   public constructor(seedData: Species[]) {
     this.data = seedData;
+  }
+
+  /**
+   * Retrieve the full list of species.
+   *
+   * @inheritdoc
+   */
+  public async list(): Promise<JsonResponse<Species[]>> {
+    console.debug("List species is called");
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    return mockResponse(this.data);
   }
 
   /**

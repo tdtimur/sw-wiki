@@ -1,4 +1,4 @@
-import type { SpeciesGetter } from "../interfaces/species.interface";
+import type { SpeciesServicer } from "../interfaces/species.interface";
 import mockSpeciesService from "./species-mock.service";
 
 /**
@@ -11,7 +11,7 @@ import mockSpeciesService from "./species-mock.service";
  *
  * @returns A {@link SpeciesGetter} implementation.
  */
-export function getSpeciesService(): SpeciesGetter {
+export function getSpeciesService(): SpeciesServicer {
   // TODO: Add real service here later
   return mockSpeciesService;
 }
