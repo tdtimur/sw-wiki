@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-lint:
+  lint-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,7 +27,7 @@ jobs:
       - name: Run lint check
         run: npm run lint
 
-      - name: Run lint check
+      - name: Run tests
         run: npm run test
 
       - name: Build application
