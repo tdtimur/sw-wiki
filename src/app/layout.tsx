@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { Toaster } from "@/components/ui/sonner";
+import { BackToTopButton } from "@/components/back-to-top";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SiteHeader />
         <Toaster />
+        <BackToTopButton />
         <main className="min-h-screen w-full px-[5vw] md:px-[10vw] lg:px-[15vw]">
           {children}
         </main>
