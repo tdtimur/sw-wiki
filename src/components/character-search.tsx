@@ -135,7 +135,9 @@ export function CharacterSearch() {
         <div className="absolute mt-2 w-full rounded-md border bg-popover shadow-md z-50">
           <Command>
             <CommandGroup
-              heading={total > 0 ? `Found ${total} matches` : ""}
+              heading={
+                total > 0 ? `Showing ${characters.length} of ${total} matches` : ""
+              }
               className="p-2 max-h-[40vh] overflow-y-auto"
             >
               {status !== 200 && (
