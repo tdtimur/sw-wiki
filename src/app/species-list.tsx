@@ -135,7 +135,7 @@ export default function SpeciesList() {
           </Button>
         ) : (
           <span className="text-xs italic my-2">
-            {isMobile ? "End of results" : ""}
+            {isMobile ? "No more species" : ""}
           </span>
         )}
       </div>

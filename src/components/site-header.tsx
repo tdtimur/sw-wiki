@@ -20,7 +20,7 @@ import { CharacterSearch } from "./character-search";
 export function SiteHeader() {
   const config = getConfig();
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/70 py-1 backdrop-blur shadow-sm">
+    <header className="sticky top-0 z-50 w-full bg-sidebar/70 py-1 backdrop-blur shadow-sm">
       <div className="container-wrapper 3xl:fixed:px-0 px-6">
         <div className="3xl:fixed:container flex justify-between h-(--header-height) items-center gap-2 **:data-[slot=separator]:!h-4">
           <Link href="/" className="flex items-center gap-3">
