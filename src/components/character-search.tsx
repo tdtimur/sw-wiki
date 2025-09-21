@@ -6,12 +6,13 @@ import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
 import Link from "next/link";
 import { toast } from "sonner";
 import { getRandomErrorText, parseSwapiPath } from "@/lib/utils";
-import { ChevronRightIcon, Loader2Icon, UserIcon } from "lucide-react";
+import { ChevronDownIcon, Loader2Icon, UserIcon } from "lucide-react";
 import { getPeopleService } from "@/lib/services/people.service";
 import type { People } from "@/lib/models/people.model";
 import { Skeleton } from "./ui/skeleton";
 import { useIsMobile } from "@/lib/hooks/isMobile";
 import { Button } from "./ui/button";
+import { Highlighter } from "./highlighter";
 
 export function CharacterSearch() {
   const [keyword, setKeyword] = useState("");
@@ -57,6 +58,7 @@ export function CharacterSearch() {
     if (keyword === "") {
       setCharacters([]);
       setTotal(0);
+      setPage(1);
       setHasMore(false);
       setOpen(false);
       return;
@@ -151,7 +153,9 @@ export function CharacterSearch() {
                         className="flex gap-2 cursor-pointer"
                       >
                         <UserIcon className="h-4 w-4" />
-                        {name}
+                        <span>
+                          <Highlighter text={name} highlight={keyword} />
+                        </span>
                       </Link>
                     </CommandItem>
                   );
@@ -186,13 +190,15 @@ export function CharacterSearch() {
                       </>
                     ) : (
                       <>
-                        <ChevronRightIcon />
+                        <ChevronDownIcon />
                         {isMobile ? "Scroll to load more" : "Load more"}
                       </>
                     )}
                   </Button>
                 ) : (
-                  <span className="text-xs italic my-2">End of results</span>
+                  <span className="text-xs italic my-2">
+                    {isLoading ? "" : "That's all of them"}
+                  </span>
                 )}
               </div>
             </CommandGroup>

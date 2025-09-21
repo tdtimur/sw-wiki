@@ -57,6 +57,7 @@ export default function SpeciesCard({
           <CardAction>
             <Link href={`/species/${speciesId}`}>
               <Button
+                className="hover:bg-primary hover:text-white"
                 onClick={() => toast.info("Loading species info...")}
                 variant={"outline"}
                 size={"sm"}
