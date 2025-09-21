@@ -116,23 +116,30 @@ export default function SpeciesList() {
             <SpeciesCardSkeleton key={i} className="min-w-full" />
           ))}
         {hasMore ? (
-          <Button
-            ref={loadMoreRef}
-            variant="outline"
-            onClick={() => !isMobile && setPage(page + 1)}
-          >
-            {isLoading ? (
-              <>
-                <Loader2Icon className="animate-spin" />
-                Loading
-              </>
-            ) : (
-              <>
-                <ChevronRightIcon />
-                {isMobile ? "Scroll to load more" : "Load more"}
-              </>
+          <div className="flex flex-col gap-2 items-center">
+            {!isLoading && (
+              <span className="italic text-xs">
+                Showing {specieses.length} of {total}
+              </span>
             )}
-          </Button>
+            <Button
+              ref={loadMoreRef}
+              variant="outline"
+              onClick={() => !isMobile && setPage(page + 1)}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2Icon className="animate-spin" />
+                  Loading
+                </>
+              ) : (
+                <>
+                  <ChevronRightIcon />
+                  {isMobile ? "Scroll to load more" : "Load more"}
+                </>
+              )}
+            </Button>
+          </div>
         ) : (
           <span className="text-xs italic my-2">
             {isMobile ? "No more species" : ""}
