@@ -91,7 +91,13 @@ export default function SpeciesList() {
         ) : specieses.length === 0 ? (
           <span>Something wrong with the Jedi archive, could not find anyone.</span>
         ) : (
-          <span>Found {total} species.</span>
+          <span>
+            Found {total} species.{" "}
+            {hasMore &&
+              (isMobile
+                ? "Scroll to bottom to load more."
+                : 'Click "Load more" to keep looking.')}
+          </span>
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-items-center">
@@ -109,7 +115,7 @@ export default function SpeciesList() {
           [...Array(4)].map((_, i) => (
             <SpeciesCardSkeleton key={i} className="min-w-full" />
           ))}
-        {hasMore && (
+        {hasMore ? (
           <Button
             ref={loadMoreRef}
             variant="outline"
@@ -127,6 +133,10 @@ export default function SpeciesList() {
               </>
             )}
           </Button>
+        ) : (
+          <span className="text-xs italic my-2">
+            {isMobile ? "End of results" : ""}
+          </span>
         )}
       </div>
     </div>

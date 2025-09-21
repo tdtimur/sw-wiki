@@ -22,6 +22,8 @@ export function CharacterSearch() {
   const [hasMore, setHasMore] = useState(false);
   const [total, setTotal] = useState(0);
   const [characters, setCharacters] = useState<People[]>([]);
+  const [status, setStatus] = useState(200);
+  const [statusText, setStatusText] = useState("");
   const ref = useRef<HTMLDivElement>(null);
 
   const loadMoreRef = useRef<HTMLButtonElement | null>(null);
@@ -54,6 +56,8 @@ export function CharacterSearch() {
   useEffect(() => {
     if (keyword === "") {
       setCharacters([]);
+      setTotal(0);
+      setHasMore(false);
       setOpen(false);
       return;
     }
@@ -73,6 +77,8 @@ export function CharacterSearch() {
           toast.error(`Status: ${response.status}`);
           return;
         }
+        setStatus(response.status);
+        setStatusText(response.statusText);
 
         const searchResults = await response.json();
         setHasMore(searchResults.next !== null && searchResults.next !== "");
@@ -109,7 +115,7 @@ export function CharacterSearch() {
   }, []);
 
   return (
-    <div ref={ref} className="relative w-full">
+    <div ref={ref} className="relative w-full md:min-w-[240px]">
       <Input
         type="search"
         placeholder="Search character by name..."
@@ -128,15 +134,14 @@ export function CharacterSearch() {
           <Command>
             <CommandGroup
               heading={total > 0 ? `Found ${total} matches` : ""}
-              className="p-2 max-h-[75vh] overflow-y-auto"
+              className="p-2 max-h-[40vh] overflow-y-auto"
             >
-              {isLoading ? (
-                Array.from({ length: 3 }).map((_, i) => (
-                  <CommandItem key={i}>
-                    <Skeleton className="h-6 w-full mb-2" />
-                  </CommandItem>
-                ))
-              ) : characters.length > 0 ? (
+              {status !== 200 && (
+                <CommandItem disabled className="text-destructive text-xs">
+                  Error {status} {statusText}
+                </CommandItem>
+              )}
+              {characters.length > 0 ? (
                 characters.map(({ name, url }) => {
                   const id = parseSwapiPath(url)?.id ?? "";
                   return (
@@ -152,11 +157,22 @@ export function CharacterSearch() {
                   );
                 })
               ) : (
-                <CommandItem disabled>No results found</CommandItem>
+                <CommandItem disabled>
+                  {isLoading ? "" : "No results found"}
+                </CommandItem>
               )}
-              {hasMore && (
-                <div className="flex items-center justify-center">
-                  {" "}
+
+              {/* Loading state, below results */}
+              {isLoading &&
+                Array.from({ length: 3 }).map((_, i) => (
+                  <CommandItem key={i}>
+                    <Skeleton className="h-6 w-full mb-2" />
+                  </CommandItem>
+                ))}
+
+              {/* Next page loader, infinite scroll on mobile */}
+              <div className="flex items-center justify-center mt-3">
+                {hasMore ? (
                   <Button
                     ref={loadMoreRef}
                     variant="outline"
@@ -175,8 +191,10 @@ export function CharacterSearch() {
                       </>
                     )}
                   </Button>
-                </div>
-              )}
+                ) : (
+                  <span className="text-xs italic my-2">End of results</span>
+                )}
+              </div>
             </CommandGroup>
           </Command>
         </div>
